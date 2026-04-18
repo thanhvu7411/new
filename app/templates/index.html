@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Viết Bài Review Trường Mỹ</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Merriweather:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
+  <!-- Markdown renderer -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <style>
+    /* ── RESET ─────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --blue:    #00356b;
+      --blue-lt: #1a5fa8;
+      --blue-bg: #eef4ff;
+      --gold:    #c8902a;
+      --green:   #1a7a4a;
+      --red:     #c62828;
+      --gray:    #f5f6fa;
+      --border:  #dde1eb;
+      --text:    #1c1c2e;
+      --sub:     #5a5f7a;
+      --radius:  12px;
+      --shadow:  0 4px 24px rgba(0,53,107,.10);
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f0f2f8;
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* ── HEADER ────────────────────────────────────────────── */
+    .app-header {
+      background: linear-gradient(135deg, var(--blue) 0%, var(--blue-lt) 100%);
+      padding: 18px 32px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      box-shadow: 0 2px 12px rgba(0,0,0,.15);
+      position: sticky; top: 0; z-index: 100;
+    }
+    .app-header .logo {
+      width: 36px; height: 36px;
+      background: rgba(255,255,255,.2);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem;
+    }
+    .app-header h1 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: -.01em;
+    }
+    .app-header p {
+      font-size: 0.78rem;
+      color: rgba(255,255,255,.7);
+      margin-top: 1px;
+    }
+    .header-badge {
+      margin-left: auto;
+      background: rgba(255,255,255,.15);
+      color: rgba(255,255,255,.9);
+      font-size: 0.72rem;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 20px;
+      letter-spacing: .05em;
+    }
+
+    /* ── LAYOUT ────────────────────────────────────────────── */
+    .main-layout {
+      display: grid;
+      grid-template-columns: 360px 1fr;
+      gap: 0;
+      height: calc(100vh - 64px);
+      overflow: hidden;
+    }
+
+    /* ── SIDEBAR (FORM) ────────────────────────────────────── */
+    .sidebar {
+      background: #fff;
+      border-right: 1px solid var(--border);
+      overflow-y: auto;
+      padding: 28px 24px 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+    }
+
+    .form-section-title {
+      font-size: 0.70rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      color: var(--sub);
+      margin-bottom: 12px;
+    }
+
+    label {
+      display: block;
+      font-size: 0.84rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+    label span { font-weight: 400; color: var(--sub); font-size: 0.78rem; }
+
+    input[type="text"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 10px 13px;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.9rem;
+      color: var(--text);
+      background: #fff;
+      transition: border-color .15s, box-shadow .15s;
+      outline: none;
+    }
+    input[type="text"]:focus,
+    select:focus,
+    textarea:focus {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px rgba(0,53,107,.10);
+    }
+
+    .input-hint {
+      font-size: 0.75rem;
+      color: var(--sub);
+      margin-top: 5px;
+    }
+
+    /* Style chips */
+    .style-chips {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .style-chip {
+      flex: 1 1 auto;
+      min-width: 100px;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 10px 12px;
+      cursor: pointer;
+      transition: all .15s;
+      text-align: center;
+      background: #fff;
+    }
+    .style-chip:hover { border-color: var(--blue); background: var(--blue-bg); }
+    .style-chip.active { border-color: var(--blue); background: var(--blue-bg); }
+    .style-chip input { display: none; }
+    .style-chip .chip-icon { font-size: 1.4rem; display: block; margin-bottom: 4px; }
+    .style-chip .chip-label { font-size: 0.78rem; font-weight: 600; color: var(--blue); }
+    .style-chip .chip-desc { font-size: 0.70rem; color: var(--sub); margin-top: 2px; }
+
+    /* API key */
+    .api-key-row {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+    .api-key-row input { flex: 1; font-family: monospace; font-size: 0.82rem; }
+    .btn-icon {
+      background: none; border: 1.5px solid var(--border);
+      border-radius: 8px; padding: 9px 11px;
+      cursor: pointer; font-size: 1rem;
+      transition: border-color .15s;
+    }
+    .btn-icon:hover { border-color: var(--blue); }
+
+    /* Generate button */
+    .btn-generate {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, var(--blue) 0%, var(--blue-lt) 100%);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.96rem;
+      font-weight: 700;
+      cursor: pointer;
+      letter-spacing: .01em;
+      transition: opacity .15s, transform .1s;
+      margin-top: 4px;
+    }
+    .btn-generate:hover:not(:disabled) { opacity: .92; transform: translateY(-1px); }
+    .btn-generate:disabled { opacity: .55; cursor: not-allowed; transform: none; }
+    .btn-generate .btn-inner { display: flex; align-items: center; justify-content: center; gap: 8px; }
+
+    /* Divider */
+    .form-divider { border: none; border-top: 1px solid var(--border); }
+
+    /* Stats preview */
+    .stat-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: var(--blue-bg);
+      color: var(--blue);
+      border-radius: 20px;
+      padding: 4px 10px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    /* ── MAIN CONTENT ──────────────────────────────────────── */
+    .content-area {
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      background: var(--gray);
+    }
+
+    /* Toolbar */
+    .content-toolbar {
+      background: #fff;
+      border-bottom: 1px solid var(--border);
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+    .toolbar-title {
+      font-size: 0.84rem;
+      font-weight: 600;
+      color: var(--text);
+      flex: 1;
+    }
+    .toolbar-school {
+      font-size: 0.78rem;
+      color: var(--sub);
+      background: var(--gray);
+      padding: 4px 10px;
+      border-radius: 6px;
+    }
+
+    .btn-toolbar {
+      display: flex; align-items: center; gap: 6px;
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.80rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1.5px solid var(--border);
+      background: #fff;
+      transition: all .15s;
+    }
+    .btn-toolbar:hover:not(:disabled) { border-color: var(--blue); color: var(--blue); background: var(--blue-bg); }
+    .btn-toolbar:disabled { opacity: .4; cursor: not-allowed; }
+    .btn-toolbar.green:hover:not(:disabled) { border-color: var(--green); color: var(--green); background: #e8f5e9; }
+    .btn-toolbar.red:hover:not(:disabled)   { border-color: var(--red);   color: var(--red);   background: #ffebee; }
+    .btn-toolbar.gold:hover:not(:disabled)  { border-color: var(--gold);  color: var(--gold);  background: #fff8e1; }
+
+    /* Tab bar */
+    .tab-bar {
+      display: flex;
+      gap: 0;
+      background: #fff;
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+    .tab-btn {
+      padding: 10px 20px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--sub);
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
+      cursor: pointer;
+      transition: all .15s;
+    }
+    .tab-btn:hover { color: var(--blue); }
+    .tab-btn.active { color: var(--blue); border-bottom-color: var(--blue); }
+
+    /* Panels */
+    .panels { flex: 1; overflow: hidden; position: relative; }
+    .panel {
+      position: absolute; inset: 0;
+      overflow-y: auto;
+      padding: 28px 32px;
+      display: none;
+    }
+    .panel.active { display: block; }
+
+    /* Empty state */
+    .empty-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      gap: 14px;
+      color: var(--sub);
+      text-align: center;
+    }
+    .empty-state .empty-icon {
+      font-size: 3.5rem;
+      opacity: .35;
+    }
+    .empty-state h3 { font-size: 1.05rem; color: var(--text); font-weight: 600; }
+    .empty-state p { font-size: 0.85rem; max-width: 300px; line-height: 1.6; }
+
+    /* Progress bar */
+    .progress-bar {
+      height: 3px;
+      background: var(--border);
+      position: relative;
+      overflow: hidden;
+      display: none;
+    }
+    .progress-bar.active { display: block; }
+    .progress-bar::after {
+      content: '';
+      position: absolute;
+      left: -40%;
+      width: 40%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, var(--blue), transparent);
+      animation: shimmer 1.2s infinite;
+    }
+    @keyframes shimmer { to { left: 140%; } }
+
+    /* Markdown preview */
+    .markdown-preview {
+      font-family: 'Merriweather', Georgia, serif;
+      font-size: 16px;
+      line-height: 1.9;
+      color: var(--text);
+      max-width: 740px;
+      margin: 0 auto;
+    }
+    .markdown-preview h1 {
+      font-family: 'Inter', sans-serif;
+      font-size: 1.85rem;
+      font-weight: 800;
+      color: var(--blue);
+      line-height: 1.22;
+      margin: 0 0 24px;
+      padding-bottom: 16px;
+      border-bottom: 3px solid var(--blue);
+    }
+    .markdown-preview h2 {
+      font-family: 'Inter', sans-serif;
+      font-size: 1.18rem;
+      font-weight: 700;
+      color: var(--blue);
+      margin: 40px 0 12px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid #c8daf0;
+    }
+    .markdown-preview h3 {
+      font-family: 'Inter', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: #1a3a5c;
+      margin: 24px 0 8px;
+    }
+    .markdown-preview p { margin-bottom: 16px; }
+    .markdown-preview blockquote {
+      background: #fffbea;
+      border-left: 4px solid #e8a000;
+      border-radius: 0 8px 8px 0;
+      padding: 14px 18px;
+      margin: 22px 0;
+      font-style: italic;
+      color: #5a3e00;
+      font-size: 0.95rem;
+      line-height: 1.8;
+    }
+    .markdown-preview table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0 6px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.86rem;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 12px rgba(0,53,107,.09);
+    }
+    .markdown-preview thead { background: var(--blue); color: #fff; }
+    .markdown-preview thead th { padding: 10px 14px; text-align: left; font-size: 0.74rem; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; }
+    .markdown-preview tbody tr:nth-child(even) { background: #f0f5fb; }
+    .markdown-preview td { padding: 9px 14px; border-bottom: 1px solid #dde6f0; }
+    .markdown-preview td:first-child { font-weight: 600; color: var(--blue); width: 50%; }
+    .markdown-preview ul, .markdown-preview ol { margin: 0 0 16px 20px; }
+    .markdown-preview li { margin-bottom: 5px; }
+    .markdown-preview em { color: #777; font-size: 0.82rem; }
+    .markdown-preview strong { font-weight: 700; }
+    .markdown-preview hr { border: none; border-top: 1px solid var(--border); margin: 28px 0; }
+
+    /* SEO meta box */
+    .seo-meta-box {
+      background: #fff;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      margin-bottom: 24px;
+      max-width: 740px;
+      margin-left: auto; margin-right: auto;
+    }
+    .seo-meta-box h3 {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: var(--sub);
+      margin-bottom: 14px;
+    }
+    .seo-field { margin-bottom: 10px; }
+    .seo-field label { font-size: 0.75rem; color: var(--sub); margin-bottom: 3px; }
+    .seo-field .seo-value { font-size: 0.88rem; color: var(--text); font-weight: 500; }
+    .seo-field.title .seo-value { color: var(--blue); font-weight: 700; font-size: 0.95rem; }
+
+    /* Raw markdown panel */
+    .raw-markdown {
+      font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
+      font-size: 0.83rem;
+      line-height: 1.7;
+      color: #333;
+      background: #fff;
+      border-radius: var(--radius);
+      padding: 24px;
+      white-space: pre-wrap;
+      word-break: break-word;
+      max-width: 740px;
+      margin: 0 auto;
+      box-shadow: var(--shadow);
+    }
+
+    /* Status bar */
+    .status-bar {
+      background: #fff;
+      border-top: 1px solid var(--border);
+      padding: 8px 24px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      font-size: 0.76rem;
+      color: var(--sub);
+      flex-shrink: 0;
+    }
+    .status-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: #ccc;
+      flex-shrink: 0;
+    }
+    .status-dot.generating { background: #2196f3; animation: pulse 1s infinite; }
+    .status-dot.done { background: #4caf50; }
+    .status-dot.error { background: var(--red); }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+
+    /* Toast */
+    .toast {
+      position: fixed;
+      bottom: 24px; right: 24px;
+      background: #222;
+      color: #fff;
+      padding: 12px 18px;
+      border-radius: 10px;
+      font-size: 0.84rem;
+      font-weight: 500;
+      box-shadow: 0 4px 20px rgba(0,0,0,.25);
+      transform: translateY(60px);
+      opacity: 0;
+      transition: all .3s;
+      z-index: 999;
+    }
+    .toast.show { transform: translateY(0); opacity: 1; }
+    .toast.success { background: #1b5e20; }
+    .toast.error   { background: #b71c1c; }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .main-layout { grid-template-columns: 1fr; height: auto; overflow: visible; }
+      .content-area { height: 80vh; }
+      .sidebar { height: auto; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="app-header">
+  <div class="logo">&#127979;</div>
+  <div>
+    <h1>AI Review Trường Mỹ</h1>
+    <p>Tự động viết bài blog chuẩn SEO · Tiếng Việt · Gemini AI</p>
+  </div>
+  <span class="header-badge">Powered by Gemini 2.0</span>
+</header>
+
+<!-- MAIN -->
+<div class="main-layout">
+
+  <!-- ── SIDEBAR ── -->
+  <aside class="sidebar">
+
+    <!-- API Key -->
+    <div>
+      <div class="form-section-title">Cấu hình API</div>
+      <label for="apiKey">Gemini API Key <span>(bắt buộc)</span></label>
+      <div class="api-key-row">
+        <input type="password" id="apiKey" placeholder="AIza..." autocomplete="off" />
+        <button class="btn-icon" id="toggleKey" title="Hiện/ẩn key">&#128065;</button>
+      </div>
+      <p class="input-hint">Lấy key miễn phí tại <a href="https://aistudio.google.com/app/apikey" target="_blank" style="color:var(--blue)">aistudio.google.com</a></p>
+    </div>
+
+    <hr class="form-divider" />
+
+    <!-- School info -->
+    <div>
+      <div class="form-section-title">Thông tin trường</div>
+      <label for="schoolName">Tên trường <span>(tiếng Anh)</span></label>
+      <input type="text" id="schoolName" placeholder="VD: Yale University, Phillips Exeter Academy..." />
+      <p class="input-hint">Nhập đúng tên tiếng Anh để AI tìm số liệu chính xác</p>
+    </div>
+
+    <div>
+      <label for="schoolLevel">Cấp học</label>
+      <select id="schoolLevel">
+        <option value="university">Đại học (University / College)</option>
+        <option value="high_school">Cấp 3 / Boarding School</option>
+        <option value="community_college">Cao đẳng (Community College)</option>
+        <option value="graduate">Sau đại học (Master / PhD)</option>
+      </select>
+    </div>
+
+    <hr class="form-divider" />
+
+    <!-- Style -->
+    <div>
+      <div class="form-section-title">Phong cách viết</div>
+      <div class="style-chips">
+        <label class="style-chip active" data-value="storytelling">
+          <input type="radio" name="style" value="storytelling" checked />
+          <span class="chip-icon">&#128214;</span>
+          <span class="chip-label">Kể chuyện</span>
+          <span class="chip-desc">Tự nhiên, tâm tình</span>
+        </label>
+        <label class="style-chip" data-value="analytical">
+          <input type="radio" name="style" value="analytical" />
+          <span class="chip-icon">&#128202;</span>
+          <span class="chip-label">Phân tích</span>
+          <span class="chip-desc">Số liệu, chi tiết</span>
+        </label>
+        <label class="style-chip" data-value="friendly">
+          <input type="radio" name="style" value="friendly" />
+          <span class="chip-icon">&#128172;</span>
+          <span class="chip-label">Thân thiện</span>
+          <span class="chip-desc">Gần gũi, dễ đọc</span>
+        </label>
+      </div>
+    </div>
+
+    <hr class="form-divider" />
+
+    <!-- Generate -->
+    <button class="btn-generate" id="btnGenerate">
+      <span class="btn-inner">
+        <span id="btnIcon">&#10024;</span>
+        <span id="btnText">Tạo bài viết</span>
+      </span>
+    </button>
+
+    <!-- Word count -->
+    <div style="text-align:center; font-size:0.76rem; color:var(--sub); margin-top:-8px;" id="wordCountDisplay"></div>
+
+  </aside>
+
+  <!-- ── CONTENT AREA ── -->
+  <div class="content-area">
+
+    <!-- Toolbar -->
+    <div class="content-toolbar">
+      <span class="toolbar-title">Bài viết</span>
+      <span class="toolbar-school" id="toolbarSchool">Chưa có bài viết</span>
+      <button class="btn-toolbar" id="btnCopy" disabled title="Copy Markdown">
+        &#128203; Copy
+      </button>
+      <button class="btn-toolbar gold" id="btnMd" disabled title="Tải Markdown">
+        &#128196; .MD
+      </button>
+      <button class="btn-toolbar green" id="btnHtml" disabled title="Tải HTML">
+        &#127760; HTML
+      </button>
+      <button class="btn-toolbar red" id="btnPdf" disabled title="Tải PDF">
+        &#128196; PDF
+      </button>
+    </div>
+
+    <!-- Progress -->
+    <div class="progress-bar" id="progressBar"></div>
+
+    <!-- Tabs -->
+    <div class="tab-bar">
+      <button class="tab-btn active" data-tab="preview">Xem trước</button>
+      <button class="tab-btn" data-tab="seo">SEO Meta</button>
+      <button class="tab-btn" data-tab="raw">Markdown thô</button>
+    </div>
+
+    <!-- Panels -->
+    <div class="panels">
+      <!-- Preview -->
+      <div class="panel active" id="panel-preview">
+        <div class="empty-state" id="emptyState">
+          <div class="empty-icon">&#128203;</div>
+          <h3>Chưa có bài viết</h3>
+          <p>Nhập tên trường và nhấn "Tạo bài viết" để bắt đầu. AI sẽ tự động tìm kiếm số liệu và viết bài chuẩn SEO.</p>
+        </div>
+        <div class="markdown-preview" id="previewContent" style="display:none"></div>
+      </div>
+
+      <!-- SEO meta -->
+      <div class="panel" id="panel-seo">
+        <div class="seo-meta-box" id="seoBox">
+          <h3>SEO Metadata</h3>
+          <p style="font-size:.84rem;color:var(--sub);">Tạo bài viết để xem metadata SEO.</p>
+        </div>
+      </div>
+
+      <!-- Raw markdown -->
+      <div class="panel" id="panel-raw">
+        <div class="raw-markdown" id="rawContent">Tạo bài viết để xem nội dung Markdown.</div>
+      </div>
+    </div>
+
+    <!-- Status bar -->
+    <div class="status-bar">
+      <div class="status-dot" id="statusDot"></div>
+      <span id="statusText">Sẵn sàng</span>
+      <span style="margin-left:auto;" id="wordCount"></span>
+    </div>
+
+  </div><!-- /.content-area -->
+</div><!-- /.main-layout -->
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+/* ── State ─────────────────────────────────────────────────────── */
+let fullMarkdown = "";
+let currentSchool = "";
+
+/* ── DOM refs ──────────────────────────────────────────────────── */
+const $ = id => document.getElementById(id);
+const apiKeyInput   = $("apiKey");
+const toggleKeyBtn  = $("toggleKey");
+const schoolInput   = $("schoolName");
+const levelSelect   = $("schoolLevel");
+const btnGenerate   = $("btnGenerate");
+const btnCopy       = $("btnCopy");
+const btnMd         = $("btnMd");
+const btnHtml       = $("btnHtml");
+const btnPdf        = $("btnPdf");
+const progressBar   = $("progressBar");
+const previewContent= $("previewContent");
+const emptyState    = $("emptyState");
+const rawContent    = $("rawContent");
+const seoBox        = $("seoBox");
+const toolbarSchool = $("toolbarSchool");
+const statusDot     = $("statusDot");
+const statusText    = $("statusText");
+const wordCount     = $("wordCount");
+const wordCountDisplay = $("wordCountDisplay");
+const toast         = $("toast");
+
+/* ── API key persistence ───────────────────────────────────────── */
+const savedKey = localStorage.getItem("gemini_api_key");
+if (savedKey) apiKeyInput.value = savedKey;
+apiKeyInput.addEventListener("change", () => {
+  localStorage.setItem("gemini_api_key", apiKeyInput.value.trim());
+});
+toggleKeyBtn.addEventListener("click", () => {
+  apiKeyInput.type = apiKeyInput.type === "password" ? "text" : "password";
+});
+
+/* ── Style chips ───────────────────────────────────────────────── */
+document.querySelectorAll(".style-chip").forEach(chip => {
+  chip.addEventListener("click", () => {
+    document.querySelectorAll(".style-chip").forEach(c => c.classList.remove("active"));
+    chip.classList.add("active");
+  });
+});
+function getStyle() {
+  return document.querySelector(".style-chip.active")?.dataset.value || "storytelling";
+}
+
+/* ── Tabs ──────────────────────────────────────────────────────── */
+document.querySelectorAll(".tab-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+    document.querySelectorAll(".panel").forEach(p => p.classList.remove("active"));
+    btn.classList.add("active");
+    $("panel-" + btn.dataset.tab).classList.add("active");
+  });
+});
+
+/* ── Toast ─────────────────────────────────────────────────────── */
+function showToast(msg, type = "") {
+  toast.textContent = msg;
+  toast.className = "toast show " + type;
+  setTimeout(() => { toast.className = "toast"; }, 3000);
+}
+
+/* ── Status helpers ────────────────────────────────────────────── */
+function setStatus(state, msg) {
+  statusDot.className = "status-dot " + state;
+  statusText.textContent = msg;
+}
+
+/* ── Word count ────────────────────────────────────────────────── */
+function countWords(text) {
+  return text.trim().split(/\s+/).filter(Boolean).length;
+}
+function updateWordCount(md) {
+  const wc = countWords(md);
+  const display = `${wc.toLocaleString()} từ`;
+  wordCount.textContent = display;
+  wordCountDisplay.textContent = display;
+}
+
+/* ── Render markdown ───────────────────────────────────────────── */
+function renderMarkdown(md) {
+  previewContent.innerHTML = marked.parse(md);
+  previewContent.style.display = "block";
+  emptyState.style.display = "none";
+}
+
+/* ── Extract SEO meta ──────────────────────────────────────────── */
+function extractAndRenderSEO(md) {
+  const fields = [
+    { key: "SEO Title",          label: "Tiêu đề SEO",          cls: "title" },
+    { key: "Meta Description",   label: "Meta Description",       cls: "" },
+    { key: "Slug",               label: "Slug URL",               cls: "" },
+    { key: "Focus Keyword",      label: "Từ khóa chính",          cls: "" },
+    { key: "Secondary Keywords", label: "Từ khóa phụ",            cls: "" },
+  ];
+  const lines = md.split("\n").slice(0, 15);
+  let html = '<h3>SEO Metadata</h3>';
+  fields.forEach(({ key, label, cls }) => {
+    const line = lines.find(l => l.includes(key + ":"));
+    const val  = line ? line.replace(/\*\*/g, "").replace(key + ":", "").trim() : "—";
+    html += `<div class="seo-field ${cls}">
+      <label>${label}</label>
+      <div class="seo-value">${val}</div>
+    </div>`;
+  });
+  seoBox.innerHTML = html;
+}
+
+/* ── Generate ──────────────────────────────────────────────────── */
+btnGenerate.addEventListener("click", async () => {
+  const apiKey    = apiKeyInput.value.trim();
+  const school    = schoolInput.value.trim();
+  const level     = levelSelect.value;
+  const style     = getStyle();
+
+  if (!apiKey)  return showToast("Vui lòng nhập Gemini API Key", "error");
+  if (!school)  return showToast("Vui lòng nhập tên trường", "error");
+
+  // Save key
+  localStorage.setItem("gemini_api_key", apiKey);
+
+  // Reset
+  fullMarkdown   = "";
+  currentSchool  = school;
+  toolbarSchool.textContent = school;
+  rawContent.textContent    = "";
+  previewContent.innerHTML  = "";
+  previewContent.style.display = "none";
+  emptyState.style.display = "flex";
+  seoBox.innerHTML = "<h3>SEO Metadata</h3><p style='font-size:.84rem;color:var(--sub)'>Đang tạo bài...</p>";
+
+  // UI state
+  btnGenerate.disabled = true;
+  $("btnText").textContent = "Đang viết bài...";
+  $("btnIcon").textContent = "⏳";
+  [btnCopy, btnMd, btnHtml, btnPdf].forEach(b => b.disabled = true);
+  progressBar.classList.add("active");
+  setStatus("generating", "Đang kết nối và viết bài...");
+
+  // Switch to preview tab
+  document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+  document.querySelectorAll(".panel").forEach(p => p.classList.remove("active"));
+  document.querySelector('[data-tab="preview"]').classList.add("active");
+  $("panel-preview").classList.add("active");
+
+  try {
+    const res = await fetch("/generate", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ school_name: school, school_level: level, style, api_key: apiKey }),
+    });
+
+    if (!res.ok) {
+      const err = await res.json();
+      throw new Error(err.error || "Lỗi server");
+    }
+
+    const reader   = res.body.getReader();
+    const decoder  = new TextDecoder();
+    let   buffer   = "";
+    let   charCount = 0;
+
+    emptyState.style.display = "none";
+    previewContent.style.display = "block";
+    previewContent.innerHTML = '<span style="color:var(--sub);font-style:italic">Đang nhận dữ liệu từ AI...</span>';
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+
+      buffer += decoder.decode(value, { stream: true });
+      const parts = buffer.split("\n\n");
+      buffer = parts.pop();
+
+      for (const part of parts) {
+        if (!part.startsWith("data: ")) continue;
+        const raw = part.slice(6).trim();
+        if (raw === "[DONE]") continue;
+
+        const obj = JSON.parse(raw);
+        if (obj.error) throw new Error(obj.error);
+
+        fullMarkdown += obj.chunk;
+        charCount    += obj.chunk.length;
+
+        // Live render every ~500 chars
+        if (charCount % 500 < obj.chunk.length) {
+          renderMarkdown(fullMarkdown);
+          updateWordCount(fullMarkdown);
+        }
+
+        rawContent.textContent = fullMarkdown;
+        setStatus("generating", `Đang viết... ${countWords(fullMarkdown).toLocaleString()} từ`);
+      }
+    }
+
+    // Final render
+    renderMarkdown(fullMarkdown);
+    rawContent.textContent = fullMarkdown;
+    updateWordCount(fullMarkdown);
+    extractAndRenderSEO(fullMarkdown);
+
+    [btnCopy, btnMd, btnHtml, btnPdf].forEach(b => b.disabled = false);
+    setStatus("done", `Hoàn thành — ${countWords(fullMarkdown).toLocaleString()} từ`);
+    showToast("Viết xong! Bạn có thể tải về hoặc copy.", "success");
+
+  } catch (err) {
+    setStatus("error", "Lỗi: " + err.message);
+    showToast("Lỗi: " + err.message, "error");
+    emptyState.style.display = "flex";
+    previewContent.style.display = "none";
+  } finally {
+    btnGenerate.disabled = false;
+    $("btnText").textContent = "Tạo bài viết";
+    $("btnIcon").textContent = "✨";
+    progressBar.classList.remove("active");
+  }
+});
+
+/* ── Copy ──────────────────────────────────────────────────────── */
+btnCopy.addEventListener("click", () => {
+  navigator.clipboard.writeText(fullMarkdown).then(() => {
+    showToast("Đã copy Markdown vào clipboard!", "success");
+  });
+});
+
+/* ── Export helpers ────────────────────────────────────────────── */
+async function doExport(endpoint, label) {
+  showToast(`Đang xuất ${label}...`);
+  try {
+    const res = await fetch(endpoint, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ content: fullMarkdown, school_name: currentSchool }),
+    });
+    if (!res.ok) throw new Error("Server error");
+    const blob = await res.blob();
+    const url  = URL.createObjectURL(blob);
+    const a    = document.createElement("a");
+    a.href = url;
+    a.download = res.headers.get("Content-Disposition")?.split("filename=")[1] || "review";
+    a.click();
+    URL.revokeObjectURL(url);
+    showToast(`Đã tải ${label}!`, "success");
+  } catch (e) {
+    showToast("Lỗi khi xuất file: " + e.message, "error");
+  }
+}
+
+btnMd.addEventListener("click",   () => doExport("/export/markdown", "Markdown"));
+btnHtml.addEventListener("click", () => doExport("/export/html", "HTML"));
+btnPdf.addEventListener("click",  () => doExport("/export/pdf", "PDF"));
+
+/* ── Enter to generate ─────────────────────────────────────────── */
+schoolInput.addEventListener("keydown", e => {
+  if (e.key === "Enter" && !btnGenerate.disabled) btnGenerate.click();
+});
+</script>
+</body>
+</html>
