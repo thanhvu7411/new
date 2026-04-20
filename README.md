@@ -13,6 +13,7 @@ Ngôn ngữ: Tiếng Việt. Platform: WordPress.
 | `posts/harvard-university-review.md` | Harvard University | Hoàn chỉnh |
 | `posts/mit-review.md` | MIT | Hoàn chỉnh |
 | `posts/stanford-university-review.md` | Stanford University | Hoàn chỉnh |
+| `posts/emerson-college-los-angeles-review.md` | Emerson College Los Angeles | Hoàn chỉnh |
 
 ---
 
