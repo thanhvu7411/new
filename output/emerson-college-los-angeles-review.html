@@ -12,158 +12,37 @@
   <style>
     @page { size: A4; margin: 12mm; }
     * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      background: #f3f1ec;
-      color: #22212a;
-      font-family: Georgia, 'Times New Roman', serif;
-      line-height: 1.85;
-      font-size: 17px;
-    }
-    .page {
-      max-width: 860px;
-      margin: 0 auto;
-      background: #ffffff;
-      box-shadow: 0 8px 34px rgba(0,0,0,0.08);
-    }
-    .download-bar {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      align-items: center;
-      padding: 14px 42px;
-      background: #f5efe3;
-      border-bottom: 1px solid #e6dcc7;
-      font-family: Arial, sans-serif;
-      font-size: 14px;
-    }
+    body { margin: 0; background: #f3f1ec; color: #22212a; font-family: Georgia, 'Times New Roman', serif; line-height: 1.85; font-size: 17px; }
+    .page { max-width: 860px; margin: 0 auto; background: #ffffff; box-shadow: 0 8px 34px rgba(0,0,0,0.08); }
+    .download-bar { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; padding: 14px 42px; background: #f5efe3; border-bottom: 1px solid #e6dcc7; font-family: Arial, sans-serif; font-size: 14px; }
     .download-bar span { color: #5a5143; }
-    .download-bar a {
-      text-decoration: none;
-      background: #4d2d7a;
-      color: #fff;
-      padding: 8px 14px;
-      border-radius: 999px;
-      font-weight: 700;
-    }
+    .download-bar a { text-decoration: none; background: #4d2d7a; color: #fff; padding: 8px 14px; border-radius: 999px; font-weight: 700; }
     .download-bar a.pdf { background: #b23a2b; }
-    .hero {
-      padding: 54px 42px 42px;
-      background: linear-gradient(135deg, #2f195f 0%, #4d2d7a 62%, #7a5bb5 100%);
-      color: #fff;
-    }
-    .hero .eyebrow {
-      font-family: Arial, sans-serif;
-      font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing: 0.14em;
-      color: #eadfb8;
-      font-weight: 700;
-      margin-bottom: 14px;
-    }
-    .hero h1 {
-      margin: 0 0 14px;
-      font-size: clamp(1.9rem, 4vw, 2.7rem);
-      line-height: 1.22;
-      max-width: 700px;
-    }
-    .hero-meta {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 16px;
-      font-family: Arial, sans-serif;
-      font-size: 13px;
-      color: #efe6ff;
-    }
+    .hero { padding: 54px 42px 42px; background: linear-gradient(135deg, #2f195f 0%, #4d2d7a 62%, #7a5bb5 100%); color: #fff; }
+    .hero .eyebrow { font-family: Arial, sans-serif; font-size: 12px; text-transform: uppercase; letter-spacing: 0.14em; color: #eadfb8; font-weight: 700; margin-bottom: 14px; }
+    .hero h1 { margin: 0 0 14px; font-size: clamp(1.9rem, 4vw, 2.7rem); line-height: 1.22; max-width: 700px; }
+    .hero-meta { display: flex; flex-wrap: wrap; gap: 16px; font-family: Arial, sans-serif; font-size: 13px; color: #efe6ff; }
     .article { padding: 38px 42px 26px; }
-    .intro {
-      font-size: 1.08rem;
-      color: #2d2740;
-      margin-bottom: 20px;
-    }
+    .intro { font-size: 1.08rem; color: #2d2740; margin-bottom: 20px; }
     .intro-secondary { margin-top: -6px; }
-    h2 {
-      margin: 40px 0 14px;
-      padding-bottom: 10px;
-      border-bottom: 2px solid #dcc68b;
-      font-family: Arial, sans-serif;
-      font-size: 1.4rem;
-      line-height: 1.35;
-      color: #3c245d;
-    }
-    h3 {
-      margin: 24px 0 10px;
-      font-family: Arial, sans-serif;
-      font-size: 1.05rem;
-      color: #47325f;
-      line-height: 1.45;
-    }
+    h2 { margin: 40px 0 14px; padding-bottom: 10px; border-bottom: 2px solid #dcc68b; font-family: Arial, sans-serif; font-size: 1.4rem; line-height: 1.35; color: #3c245d; }
+    h3 { margin: 24px 0 10px; font-family: Arial, sans-serif; font-size: 1.05rem; color: #47325f; line-height: 1.45; }
     p { margin: 0 0 18px; }
     a { color: #4d2d7a; }
     strong { color: #24153b; }
     ul, ol { margin: 0 0 18px 24px; padding: 0; }
     li { margin-bottom: 8px; }
-    .section-divider {
-      border: 0;
-      border-top: 1px solid #eee3cf;
-      margin: 28px 0;
-    }
-    .stats-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin: 22px 0 26px;
-      font-family: Arial, sans-serif;
-      font-size: 14px;
-      overflow: hidden;
-      border-radius: 12px;
-      box-shadow: 0 2px 14px rgba(60,36,93,0.09);
-    }
-    .stats-table th {
-      text-align: left;
-      background: #3c245d;
-      color: #fff;
-      padding: 12px 14px;
-      font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-    }
-    .stats-table td {
-      padding: 12px 14px;
-      border-bottom: 1px solid #eadff4;
-      vertical-align: top;
-    }
+    .section-divider { border: 0; border-top: 1px solid #eee3cf; margin: 28px 0; }
+    .stats-table { width: 100%; border-collapse: collapse; margin: 22px 0 26px; font-family: Arial, sans-serif; font-size: 14px; overflow: hidden; border-radius: 12px; box-shadow: 0 2px 14px rgba(60,36,93,0.09); }
+    .stats-table th { text-align: left; background: #3c245d; color: #fff; padding: 12px 14px; font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; }
+    .stats-table td { padding: 12px 14px; border-bottom: 1px solid #eadff4; vertical-align: top; }
     .stats-table tr:nth-child(even) td { background: #faf7fe; }
     .stats-table td:first-child { width: 42%; font-weight: 700; color: #3c245d; }
-    .callout {
-      margin: 24px 0;
-      padding: 18px 20px;
-      background: #fff7e5;
-      border-left: 4px solid #d3a534;
-      border-radius: 0 10px 10px 0;
-      color: #5b4715;
-    }
+    .callout { margin: 24px 0; padding: 18px 20px; background: #fff7e5; border-left: 4px solid #d3a534; border-radius: 0 10px 10px 0; color: #5b4715; }
     .callout p:last-child { margin-bottom: 0; }
-    .article-footer {
-      padding: 20px 42px 34px;
-      border-top: 1px solid #efe5d3;
-      color: #7a715f;
-      font-family: Arial, sans-serif;
-      font-size: 13px;
-      line-height: 1.75;
-    }
-    @media (max-width: 720px) {
-      body { font-size: 16px; }
-      .download-bar, .hero, .article, .article-footer { padding-left: 22px; padding-right: 22px; }
-      .stats-table td:first-child { width: auto; }
-    }
-    @media print {
-      body { background: #fff; font-size: 12pt; }
-      .page { max-width: 100%; box-shadow: none; }
-      .download-bar { display: none; }
-      .hero, .stats-table th, .callout { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-      h2, h3 { page-break-after: avoid; }
-      table, .callout { page-break-inside: avoid; }
-    }
+    .article-footer { padding: 20px 42px 34px; border-top: 1px solid #efe5d3; color: #7a715f; font-family: Arial, sans-serif; font-size: 13px; line-height: 1.75; }
+    @media (max-width: 720px) { body { font-size: 16px; } .download-bar, .hero, .article, .article-footer { padding-left: 22px; padding-right: 22px; } .stats-table td:first-child { width: auto; } }
+    @media print { body { background: #fff; font-size: 12pt; } .page { max-width: 100%; box-shadow: none; } .download-bar { display: none; } .hero, .stats-table th, .callout { -webkit-print-color-adjust: exact; print-color-adjust: exact; } h2, h3 { page-break-after: avoid; } table, .callout { page-break-inside: avoid; } }
   </style>
 </head>
 <body>
@@ -179,7 +58,7 @@
       <div class="hero-meta">
         <span>Cập nhật: Tháng 4, 2026</span>
         <span>Nguồn: Emerson College, College Board BigFuture, US News</span>
-        <span>Đọc: ~18 phút</span>
+        <span>Đọc: ~19 phút</span>
       </div>
     </header>
     <article class="article">
@@ -209,51 +88,51 @@
 <td>5960 West Sunset Blvd, Los Angeles, California</td>
 </tr>
 <tr>
-<td>Tuition full-time</td>
+<td>Học phí toàn thời gian</td>
 <td><strong>$28.992/kỳ</strong>, tương đương <strong>$57.984/năm</strong> (2025-2026)</td>
 </tr>
 <tr>
-<td>Housing &amp; food</td>
+<td>Chi phí chỗ ở và ăn uống</td>
 <td><strong>$10.576-$11.076/kỳ</strong> tùy loại phòng</td>
 </tr>
 <tr>
-<td>Off-campus living estimate</td>
+<td>Ước tính chi phí sinh hoạt ngoài ký túc xá</td>
 <td><strong>$17.866/năm</strong></td>
 </tr>
 <tr>
-<td>Books &amp; supplies</td>
+<td>Sách vở và học liệu</td>
 <td><strong>$1.250/năm</strong></td>
 </tr>
 <tr>
-<td>Miscellaneous expenses</td>
+<td>Chi phí cá nhân khác</td>
 <td><strong>$4.760/năm</strong></td>
 </tr>
 <tr>
-<td>Acceptance rate Emerson College</td>
+<td>Tỷ lệ chấp nhận hồ sơ của Emerson College</td>
 <td><strong>51%</strong> (US News) / <strong>48,07%</strong> (College Board BigFuture)</td>
 </tr>
 <tr>
-<td>SAT range</td>
+<td>Khoảng điểm SAT</td>
 <td><strong>1270-1420</strong> (US News) / <strong>1260-1400</strong> (BigFuture)</td>
 </tr>
 <tr>
 <td>GPA</td>
-<td>Trường không công bố GPA trung bình rõ trên trang public; BigFuture cho thấy <strong>58% admitted students có GPA 3.75+</strong></td>
+<td>Trường không công bố GPA trung bình rõ trên trang public; BigFuture cho thấy <strong>58% sinh viên trúng tuyển có GPA từ 3.75 trở lên</strong></td>
 </tr>
 <tr>
-<td>Test policy</td>
-<td><strong>Test-optional</strong></td>
+<td>Chính sách nộp điểm chuẩn hóa</td>
+<td><strong>Không bắt buộc nộp SAT/ACT (test-optional)</strong></td>
 </tr>
 <tr>
-<td>English proficiency</td>
+<td>Yêu cầu tiếng Anh</td>
 <td>TOEFL <strong>95</strong>, IELTS <strong>7.0</strong>, Duolingo <strong>125</strong>, PTE <strong>65</strong>, Cambridge <strong>185</strong></td>
 </tr>
 <tr>
-<td>Số cơ hội internship</td>
+<td>Số cơ hội thực tập</td>
 <td><strong>200+</strong> theo trang Emerson Los Angeles</td>
 </tr>
 <tr>
-<td>Sinh viên undergraduate mỗi kỳ tại ELA</td>
+<td>Số sinh viên bậc cử nhân mỗi kỳ tại ELA</td>
 <td>Khoảng <strong>215</strong></td>
 </tr>
 </tbody>
@@ -269,7 +148,7 @@
 <p>Điểm này làm mình nghĩ Emerson LA phù hợp hơn với những người thích môi trường sáng tạo có nhịp sống nghề nghiệp rõ ràng. Nó có chất Hollywood, nhưng không theo kiểu hào nhoáng; đúng hơn là một không gian khá thực tế cho người chuẩn bị bước vào ngành.</p>
 <hr class="section-divider" />
 <h2>Khi đọc sâu hơn về học thuật: áp lực thật sự nằm ở internship và khả năng tự chủ</h2>
-<p>Khi tìm hiểu kỹ hơn, mình thấy trải nghiệm học tại Emerson LA không xoay quanh câu chuyện &ldquo;học một chương trình hoàn toàn khác&rdquo; mà là học kỳ được thiết kế để sinh viên vừa học vừa làm việc thực tế. Theo Emerson, undergraduate students tại đây sẽ học trong một học kỳ fall hoặc spring và tham gia <strong>semester-long internship</strong> liên quan đến chuyên ngành.</p>
+<p>Khi tìm hiểu kỹ hơn, mình thấy trải nghiệm học tại Emerson LA không xoay quanh câu chuyện &ldquo;học một chương trình hoàn toàn khác&rdquo; mà là học kỳ được thiết kế để sinh viên vừa học vừa làm việc thực tế. Theo Emerson, sinh viên bậc cử nhân tại đây sẽ học trong một học kỳ fall hoặc spring và tham gia <strong>semester-long internship</strong> liên quan đến chuyên ngành.</p>
 <p>Đó là phần hấp dẫn nhất, nhưng cũng là phần khiến mình thấy trường này không hề dễ theo kiểu nhiều người tưởng. Emerson nói rất rõ: sinh viên phải <strong>tự ứng tuyển, tự phỏng vấn, tự nhận internship</strong>, còn staff của ELA đóng vai trò hỗ trợ tư vấn, chuẩn bị và định hướng. Nói cách khác, bạn không vào đây để được &ldquo;xếp sẵn&rdquo; công việc; bạn vào đây để được đặt ở rất gần cơ hội, rồi phải tự chạm tới nó.</p>
 <h3>Những internship site khiến Emerson LA nổi bật</h3>
 <p>Danh sách internship sites của trường thực sự đáng chú ý, với nhiều cái tên quen thuộc trong entertainment và media như <strong>A24, Amazon Studios, BuzzFeed, DreamWorks Animation, HBO, NBCUniversal, Sony, Warner Bros., Walt Disney Studios, Variety, The Hollywood Reporter</strong> và nhiều studio, agency, production house khác.</p>
@@ -289,7 +168,7 @@
 <p>Vì đây là cơ sở của Emerson College, nên phần <strong>điều kiện đầu vào Emerson College</strong> cần đọc theo admissions overall của trường. Theo <strong>US News</strong>, Emerson College có <strong>acceptance rate 51%</strong>. Theo <strong>College Board BigFuture</strong>, con số gần nhất là <strong>48,07%</strong>. Nhìn bề ngoài, đây không phải nhóm trường cực khó như Ivy League hay Stanford, nhưng chắc chắn cũng không phải kiểu &ldquo;nộp là đậu&rdquo;.</p>
 <p>Về <strong>SAT</strong>, US News ghi nhận nhóm nộp điểm có mức <strong>1270-1420</strong>, còn BigFuture ghi nhận <strong>1260-1400</strong>. Emerson hiện theo chính sách <strong>test-optional</strong>, nên SAT không bắt buộc. Tuy nhiên, nếu bạn có điểm tốt, nó vẫn là một tín hiệu mạnh giúp hồ sơ nổi bật hơn.</p>
 <h3>GPA cần ở mức nào?</h3>
-<p>Đây là phần nhiều người hỏi nhất. Emerson không công bố một con số GPA trung bình thật rõ ràng trên trang public mà mình kiểm tra được, nhưng dữ liệu BigFuture cho thấy mặt bằng admitted students tương đối mạnh:</p>
+<p>Đây là phần nhiều người hỏi nhất. Emerson không công bố một con số GPA trung bình thật rõ ràng trên trang public mà mình kiểm tra được, nhưng dữ liệu BigFuture cho thấy mặt bằng sinh viên trúng tuyển tương đối mạnh:</p>
 <ul>
 <li><strong>58%</strong> có GPA <strong>3.75+</strong></li>
 <li><strong>24%</strong> ở mức <strong>3.50-3.74</strong></li>
@@ -297,7 +176,7 @@
 </ul>
 <p>Đọc những tỷ lệ này, mình nghĩ cách hiểu thực tế nhất là: nếu bạn đang cân nhắc <strong>du học Emerson College Los Angeles</strong>, một hồ sơ an toàn nên nhắm ít nhất quanh ngưỡng <strong>GPA 3.5+</strong>, đặc biệt nếu bạn không nộp SAT.</p>
 <h3>Yêu cầu tiếng Anh cho sinh viên quốc tế</h3>
-<p>Emerson yêu cầu một trong các mức tối thiểu sau cho international applicants:</p>
+<p>Emerson yêu cầu một trong các mức tối thiểu sau cho ứng viên quốc tế:</p>
 <ul>
 <li>TOEFL iBT: <strong>95</strong></li>
 <li>IELTS: <strong>7.0</strong></li>
@@ -305,33 +184,33 @@
 <li>PTE Academic: <strong>65</strong></li>
 <li>Cambridge English: <strong>185</strong></li>
 </ul>
-<p>Nếu bạn nộp SAT hoặc ACT, trường cho biết có thể waive English proficiency requirement trong một số trường hợp theo chính sách của họ.</p>
+<p>Nếu bạn nộp SAT hoặc ACT, trường cho biết có thể được miễn yêu cầu chứng minh năng lực tiếng Anh trong một số trường hợp theo chính sách của họ.</p>
 <hr class="section-divider" />
 <h2>Khi nhìn vào học phí Emerson College Los Angeles cho sinh viên quốc tế: đây không phải lựa chọn tiết kiệm</h2>
 <p>Mình nghĩ đây là đoạn mà hầu hết phụ huynh và học sinh sẽ dừng lại lâu nhất. Theo bảng <strong>Undergraduate Costs and Billing Schedule 2025-2026</strong> của Emerson:</p>
 <ul>
-<li><strong>Tuition full-time:</strong> <strong>$28.992/kỳ</strong>, tương đương <strong>$57.984/năm</strong></li>
-<li><strong>Food and housing tại Los Angeles:</strong> từ <strong>$10.576 đến $11.076/kỳ</strong></li>
+<li><strong>Học phí toàn thời gian:</strong> <strong>$28.992/kỳ</strong>, tương đương <strong>$57.984/năm</strong></li>
+<li><strong>Chi phí chỗ ở và ăn uống tại Los Angeles:</strong> từ <strong>$10.576 đến $11.076/kỳ</strong></li>
 <li><strong>Los Angeles Student Services Fee:</strong> <strong>$264/kỳ</strong></li>
-<li><strong>Health insurance:</strong> <strong>$2.909</strong> cho fall và <strong>$1.699</strong> cho spring</li>
-<li><strong>Parking fee:</strong> <strong>$600/kỳ</strong> nếu có xe</li>
+<li><strong>Bảo hiểm y tế:</strong> <strong>$2.909</strong> cho fall và <strong>$1.699</strong> cho spring</li>
+<li><strong>Phí đỗ xe:</strong> <strong>$600/kỳ</strong> nếu có xe</li>
 </ul>
 <p>Nếu nhìn tiếp vào phần ước tính chi phí gián tiếp, trường còn ghi:</p>
 <ul>
-<li><strong>Off-campus living estimate:</strong> <strong>$17.866/năm</strong></li>
-<li><strong>Books &amp; supplies:</strong> <strong>$1.250/năm</strong></li>
-<li><strong>Miscellaneous expenses:</strong> <strong>$4.760/năm</strong></li>
-<li><strong>Travel costs:</strong> khoảng <strong>$810-$1.450/năm</strong></li>
+<li><strong>Ước tính chi phí sinh hoạt ngoài ký túc xá:</strong> <strong>$17.866/năm</strong></li>
+<li><strong>Sách vở và học liệu:</strong> <strong>$1.250/năm</strong></li>
+<li><strong>Chi phí cá nhân khác:</strong> <strong>$4.760/năm</strong></li>
+<li><strong>Chi phí đi lại:</strong> khoảng <strong>$810-$1.450/năm</strong></li>
 </ul>
 <p>Riêng cơ sở Los Angeles còn lưu ý rằng nhiều sinh viên sẽ cần có xe hoặc thuê xe trong thời gian ở LA, với mức thuê xe bắt đầu khoảng <strong>$600/tháng</strong>. Đọc đến đây thì mình nghĩ phải nói thật: nếu bạn đang tìm <strong>du học Mỹ chi phí thấp</strong> hay một lộ trình <strong>du học Mỹ tiết kiệm</strong>, Emerson LA không phải lựa chọn điển hình.</p>
-<h3>Financial aid có giúp gì cho sinh viên quốc tế không?</h3>
+<h3>Hỗ trợ tài chính có giúp gì cho sinh viên quốc tế không?</h3>
 <p>Phần tích cực là Emerson cho biết các khoản <strong>grants và scholarships của Emerson sẽ chuyển sang học kỳ fall hoặc spring ở Los Angeles</strong>. Với sinh viên quốc tế, trường nói rõ bạn không đủ điều kiện nhận U.S. federal aid, nhưng vẫn có thể tìm:</p>
 <ul>
-<li><strong>Merit scholarships</strong></li>
-<li>Private scholarships</li>
-<li>Private student loans (thường cần co-signer là công dân Mỹ)</li>
+<li><strong>Học bổng thành tích</strong></li>
+<li>Học bổng tư nhân</li>
+<li>Khoản vay sinh viên tư nhân (thường cần co-signer là công dân Mỹ)</li>
 </ul>
-<p>Mình thấy đây là kiểu trường mà bạn phải chuẩn bị tài chính theo hướng rất thực tế. Không chỉ nhìn tuition, mà phải nhìn toàn bộ bức tranh chi phí sống ở Los Angeles.</p>
+<p>Mình thấy đây là kiểu trường mà bạn phải chuẩn bị tài chính theo hướng rất thực tế. Không chỉ nhìn học phí, mà phải nhìn toàn bộ bức tranh chi phí sống ở Los Angeles.</p>
 <div class="callout">
 <p><strong>Nhận xét cá nhân</strong></p>
 <p>Nếu chỉ xét riêng chi phí, Emerson LA không &ldquo;dễ chịu&rdquo;. Nhưng nếu mục tiêu của bạn là một học kỳ đặt mình thật gần Hollywood, internship và network đúng ngành, thì đây là kiểu chi phí nhiều người vẫn chấp nhận để đổi lấy vị trí và cơ hội.</p>
@@ -440,11 +319,11 @@
 <h3>Emerson College Los Angeles có phải là trường đại học riêng ở Los Angeles không?</h3>
 <p>Không. Đây là cơ sở Los Angeles của <strong>Emerson College</strong>, không phải một trường đại học 4 năm độc lập như UCLA hay USC.</p>
 <h3>Học phí Emerson College Los Angeles cho sinh viên quốc tế là bao nhiêu?</h3>
-<p>Theo bảng phí công khai 2025-2026, tuition full-time là <strong>$57.984/năm</strong>. Phần housing và food tại Los Angeles dao động khoảng <strong>$21.152-$22.152/năm</strong>, chưa tính bảo hiểm, sách vở và chi phí cá nhân.</p>
+<p>Theo bảng phí công khai 2025-2026, học phí toàn thời gian là <strong>$57.984/năm</strong>. Phần chỗ ở và ăn uống tại Los Angeles dao động khoảng <strong>$21.152-$22.152/năm</strong>, chưa tính bảo hiểm, sách vở và chi phí cá nhân.</p>
 <h3>Điều kiện đầu vào Emerson College có cần SAT không?</h3>
-<p>Không bắt buộc. Emerson hiện <strong>test-optional</strong>, nhưng dữ liệu mới nhất cho thấy nhóm nộp điểm thường nằm quanh <strong>1260-1400</strong> hoặc <strong>1270-1420</strong>.</p>
+<p>Không bắt buộc. Emerson hiện <strong>không bắt buộc nộp SAT/ACT (test-optional)</strong>, nhưng dữ liệu mới nhất cho thấy nhóm nộp điểm thường nằm quanh <strong>1260-1400</strong> hoặc <strong>1270-1420</strong>.</p>
 <h3>GPA để vào Emerson College nên ở mức nào?</h3>
-<p>Trường không công bố một GPA trung bình thật rõ trên trang public, nhưng dữ liệu BigFuture cho thấy <strong>58% admitted students có GPA 3.75+</strong>. Một hồ sơ từ <strong>3.5 trở lên</strong> thường sẽ cạnh tranh hơn.</p>
+<p>Trường không công bố một GPA trung bình thật rõ trên trang public, nhưng dữ liệu BigFuture cho thấy <strong>58% sinh viên trúng tuyển có GPA từ 3.75 trở lên</strong>. Một hồ sơ từ <strong>3.5 trở lên</strong> thường sẽ cạnh tranh hơn.</p>
 <h3>Sinh viên quốc tế có thể thực tập ở Emerson Los Angeles không?</h3>
 <p>Có, nhưng phải đáp ứng điều kiện của chương trình và đủ tiêu chuẩn <strong>CPT</strong> theo quy định dành cho sinh viên quốc tế học tại Mỹ.</p>
 <hr class="section-divider" />
